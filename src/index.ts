@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./db";
 import ollamaRoutes from "./routes/ollama";
+import agentRoutes from "./routes/agent";
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/ollama", ollamaRoutes);
+app.use("/api/agent", agentRoutes);
 
 app.get("/", (req, res) => {
     res.send("Learnova Backend Running 🚀");

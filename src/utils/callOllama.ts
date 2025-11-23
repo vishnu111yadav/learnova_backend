@@ -1,6 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 export async function callOllama(model: string, prompt: string, options: any = {}) {
     const body: any = {
         model,
@@ -8,12 +5,10 @@ export async function callOllama(model: string, prompt: string, options: any = {
         stream: false,
     };
 
-    // Only add correct 'options' block
+    // Only include "options" if not empty
     if (Object.keys(options).length > 0) {
         body.options = options;
     }
-
-    console.log("📤 Sending to Ollama:", body);
 
     const res = await fetch(`${process.env.OLLAMA_BASE_URL}/api/generate`, {
         method: "POST",
@@ -22,9 +17,8 @@ export async function callOllama(model: string, prompt: string, options: any = {
     });
 
     if (!res.ok) {
-        const text = await res.text();
-        console.error("❌ Ollama returned:", text);
-        throw new Error(`Ollama error: ${res.status} — ${text}`);
+        const errText = await res.text();
+        throw new Error(`Ollama error: ${res.status} → ${errText}`);
     }
 
     return res.json();
